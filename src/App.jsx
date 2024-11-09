@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import Form from "./Components/Form";
+import Card from "./Components/Card";
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [submittedData, setSubmittedData] = useState(null);
+  const [error, setError] = useState("");
+
+  // Función para manejar el envío y validación de datos
+  const handleFormSubmit = (data) => {
+    setError("");
+
+    // Validaciones
+    if (data.name.length < 3 || data.name.startsWith(" ")) {
+      setError("Por favor chequea que la información sea correcta");
+      return;
+    }
+    if (data.info.length < 6) {
+      setError("Por favor chequea que la información sea correcta");
+      return;
+    }
+
+    // Si las validaciones pasan, guarda los datos
+    setSubmittedData(data);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <h2>Datos personales</h2>
+      <Form onSubmit={handleFormSubmit} />
+
+      
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      
+      {submittedData && (
+        <Card name={submittedData.name} info={submittedData.info} />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
